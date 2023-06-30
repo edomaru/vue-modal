@@ -29,8 +29,16 @@ onUnmounted(() => document.removeEventListener('keyup', handleKeyup))
             <transition name="drop">
                 <div class="v-modal-dialog" v-show="show">
                     <div class="v-modal-content">
-                        <slot />
-                        <button @click="close" type="button">Close</button>
+                        <div class="v-modal-header" v-if="$slots.header">
+                            <slot name="header" />
+                            <button @click="close" class="btn-close" type="button">&times;</button>
+                        </div>
+                        <div class="v-modal-body">
+                            <slot name="body" />
+                        </div>
+                        <div class="v-modal-footer" v-if="$slots.footer">
+                            <slot name="footer" />
+                        </div>
                     </div>
                 </div>
             </transition>
@@ -70,7 +78,38 @@ onUnmounted(() => document.removeEventListener('keyup', handleKeyup))
   border: 1px solid rgba(0, 0, 0, 0.3);
   background-clip: padding-box;
   border-radius: 0.3rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.v-modal-header,
+.v-modal-body,
+.v-modal-footer {
   padding: 1rem;
+}
+
+.v-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #dedede;
+}
+
+.btn-close {
+  border: none;
+  font-size: 1rem;
+  padding: 0.25em;
+  cursor: pointer;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.5);
+  background: transparent;
+}
+
+.v-modal-footer {
+    border-top: 1px solid #dedede;
+  display: flex;
+  justify-content: end;
+  gap: 6px;
 }
 
 .hidden {
