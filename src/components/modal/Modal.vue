@@ -1,20 +1,36 @@
 <script setup>
+import { onMounted, onUnmounted } from "vue";
 defineProps({
     show: {
         type: Boolean,
         default: false
     }
 })
+
+const emit = defineEmits(['close'])
+
+const close = () => {
+    emit('close')
+}
+
+const handleKeyup = (event) => {
+    if (event.keyCode === 27) {
+        close()
+    }
+}
+
+onMounted(() => document.addEventListener('keyup', handleKeyup))
+onUnmounted(() => document.removeEventListener('keyup', handleKeyup))
 </script>
 
 <template>
     <transition name="fade">
-        <div class="v-modal" v-show="show">
+        <div class="v-modal" v-show="show" @click.self="close">
             <transition name="drop">
                 <div class="v-modal-dialog" v-show="show">
                     <div class="v-modal-content">
                         <slot />
-                        <button @click="$emit('close')" type="button">Close</button>
+                        <button @click="close" type="button">Close</button>
                     </div>
                 </div>
             </transition>
