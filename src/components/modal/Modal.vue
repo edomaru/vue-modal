@@ -8,14 +8,18 @@ defineProps({
 </script>
 
 <template>
-    <div class="v-modal" :class="{ hidden: !show }">
-        <div class="v-modal-dialog">
-            <div class="v-modal-content">
-                <slot />
-                <button @click="$emit('close')" type="button">Close</button>
-            </div>
+    <transition name="fade">
+        <div class="v-modal" v-show="show">
+            <transition name="drop">
+                <div class="v-modal-dialog" v-show="show">
+                    <div class="v-modal-content">
+                        <slot />
+                        <button @click="$emit('close')" type="button">Close</button>
+                    </div>
+                </div>
+            </transition>
         </div>
-    </div>
+    </transition>
 </template>
 
 <style scoped>
@@ -55,5 +59,26 @@ defineProps({
 
 .hidden {
     display: none;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.drop-enter-active,
+.drop-leave-active {
+  transition: all 0.3s ease-out;
+}
+
+.drop-enter-from,
+.drop-leave-to {
+  opacity: 0;
+  transform: translate(0, -50px);
 }
 </style>
